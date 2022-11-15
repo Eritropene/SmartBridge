@@ -3,7 +3,7 @@
 
 #include "Task.h"
 
-/*Scheduler dei task*/
+/*Scheduler dei task, eseguito nel super loop*/
 class Scheduler {
 
     Task** tasks;
@@ -12,8 +12,13 @@ class Scheduler {
     unsigned int max_tasks;
 
 public:
+    /*Crea uno Scheduler con massimo @maxTasks task*/
     Scheduler(unsigned int maxTasks);
+
+    /*Aggiunge un task alla coda dei task, se non piena*/
     void addTask(Task* task);
+
+    /*Esegue i task presenti nella coda*/
     void executeTasks();
 };
 
