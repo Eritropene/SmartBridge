@@ -7,7 +7,6 @@
 class Scheduler {
 
     Task** tasks;
-    int index = 0;
     unsigned int task_count = 0;
     unsigned int max_tasks;
 

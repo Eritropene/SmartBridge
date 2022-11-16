@@ -14,12 +14,7 @@ void Scheduler::addTask(Task* task) {
 }
 
 void Scheduler::executeTasks() {
-    //execute task
-    tasks[index]->run();
-    //switch task
-    if (index+1 < task_count) {
-        index++;
-    } else {
-        index = 0;
+    for (int i = 0; i < task_count; i++) {
+        tasks[i]->run();
     }
 }
