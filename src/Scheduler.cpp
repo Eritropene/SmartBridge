@@ -3,7 +3,7 @@
 
 Scheduler::Scheduler(unsigned int maxTasks) {
     max_tasks = maxTasks;
-    tasks = (Task**)malloc(max_tasks*sizeof(Task*));
+    tasks = new Task*[maxTasks];
 }
 
 void Scheduler::addTask(Task* task) {
