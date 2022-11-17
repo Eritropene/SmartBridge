@@ -1,5 +1,5 @@
 #ifndef __BUTTON__
-#define __BUTTON__
+#define __BUTTON__ 
 
 /*Rappresenta un pulsante*/
 class Button {
