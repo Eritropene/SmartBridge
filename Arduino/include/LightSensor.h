@@ -4,12 +4,16 @@
 class LightSensor {
 
     int pin;
+    float value;
+    float threshold;
 
     public:
 
-    LightSensor(int pin);
+    LightSensor(int pin, float thresholdValue);
 
     float getValue();
+
+    bool isAboveThreshold();
 };
 
 #endif

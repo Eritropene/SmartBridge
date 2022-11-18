@@ -15,6 +15,6 @@ void Scheduler::addTask(Task* task) {
 
 void Scheduler::executeTasks() {
     for (int i = 0; i < task_count; i++) {
-        tasks[i]->run();
+        tasks[i]->tick();
     }
 }

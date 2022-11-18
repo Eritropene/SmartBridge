@@ -14,6 +14,7 @@ class LedControlTask: public Task {
     Led* led;
     PirSensor* pir;
     LightSensor* lightSensor;
+    long shutdownTimer;
 
 public:
     /*Constructor, parametri sono il led, sensore PIR, e sensore di luce*/

@@ -9,7 +9,7 @@ class PirSensor {
 
     PirSensor(int pin);
 
-    float getValue();
+    bool getSignal();
 };
 
 #endif
