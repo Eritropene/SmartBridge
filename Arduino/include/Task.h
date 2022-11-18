@@ -5,7 +5,7 @@
 class Task {
 public:
     /*Esegue il task. Questo metodo viene chiamato dallo Scheduler a ogni ciclo*/
-    virtual void run() = 0;
+    virtual void tick() = 0;
 };
 
 #endif
