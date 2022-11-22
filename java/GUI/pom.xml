@@ -1,23 +1,29 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>GUI</groupId>
-    <artifactId>smartbridge</artifactId>
+    <groupId>smartbridge</groupId>
+    <artifactId>GUI</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javafx.version>17.0.2</javafx.version>
         <maven.compiler.release>11</maven.compiler.release>
+        <javafx.version>17.0.2</javafx.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
     </properties>
-    
+
     <dependencies>
+		<!-- https://mvnrepository.com/artifact/org.scream3r/jssc -->
+		<dependency>
+		    <groupId>org.scream3r</groupId>
+		    <artifactId>jssc</artifactId>
+		    <version>2.8.0</version>
+		</dependency>
         <dependency>
-	      <groupId>org.openjfx</groupId>
-	      <artifactId>javafx-controls</artifactId>
-	      <version>${javafx.version}</version>
+	      	<groupId>org.openjfx</groupId>
+	      	<artifactId>javafx-controls</artifactId>
+	      	<version>${javafx.version}</version>
 	    </dependency>
 		<dependency>
             <groupId>org.openjfx</groupId>
@@ -25,11 +31,13 @@
             <version>${javafx.version}</version>
         </dependency>
 		<!-- Comment for cross-platform fat jar-->
+
 		<dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
             <version>${javafx.version}</version>
         </dependency>
+
 	    <!-- Uncomment for cross-platform fat jar-->
 <!--
 		<dependency>
@@ -70,8 +78,7 @@
 	        <classifier>mac</classifier>
 	    </dependency>
 -->
-	</dependencies>
-	
+    </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -87,10 +94,17 @@
               <artifactId>javafx-maven-plugin</artifactId>
               <version>${javafx.maven.plugin.version}</version>
               <configuration>
-                  <mainClass>GUI.smartbridge.App</mainClass>
+                  <mainClass>smartbridge.GUI.Launcher</mainClass>
               </configuration>
           </plugin>
-            <plugin>
+			<!-- JUnit5 tests-->
+        	<plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-surefire-plugin</artifactId>
+	            <version>2.22.2</version>
+        	</plugin>
+			<!-- JAR building -->
+			<plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
             <version>3.2.0</version>
@@ -103,11 +117,11 @@
                     <configuration>
                         <shadedArtifactAttached>true</shadedArtifactAttached>
                         <shadedClassifierName>project-classifier</shadedClassifierName>
-                        <outputFile>shade\${project.artifactId}.jar</outputFile>
+                        <outputFile>download\${project.artifactId}.jar</outputFile>
                         <transformers>
                             <transformer implementation=
                                                  "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                <mainClass>GUI.smartbridge.App</mainClass>
+                                <mainClass>smartbridge.GUI.Launcher</mainClass>
                             </transformer>
                         </transformers>
                     </configuration>
