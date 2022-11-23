@@ -1,10 +1,12 @@
 #ifndef __TASK__
 #define __TASK__
+#include "MsgService.h"
 
-/*Rappresenta un Task eseguibile dallo Scheduler*/
+/*Template for a Task object with a tick() method for updates*/
 class Task {
 public:
-    /*Esegue il task. Questo metodo viene chiamato dallo Scheduler a ogni ciclo*/
+
+    /*This method is used by the Scheduler to run Tasks*/
     virtual void tick() = 0;
 };
 

@@ -36,7 +36,7 @@ public:
   bool isMsgAvailable(Pattern& pattern);
   Msg* receiveMsg(Pattern& pattern);
   
-  void sendMsg(const Msg& msg);
+  //void sendMsg(const Msg& msg);
   void sendMsg(const String& msg);
 };
 

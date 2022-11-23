@@ -10,9 +10,16 @@
 #include <LiquidCrystal_I2C.h>
 
 enum WaterLevelControlState {NORMAL, PRE_ALARM, ALARM};
-enum AlarmState {AUTO, MANUAL_POT, MANUAL_SERIAL};
+enum AlarmStateControl {AUTO, MANUAL_POT, MANUAL_SERIAL};
 
 class WaterLevelControlTask: public Task {
+private:
+
+    WaterLevelControlState state;
+    AlarmStateControl alarmStateControl;
+
+    void measureWaterLevel();
+
 public:
     WaterLevelControlTask(Led* alarmLed, Led* greenLed, Button* button, Potentiometer* pot, Servo* servoMotor, Sonar* sonar, LiquidCrystal_I2C* display);
 
@@ -28,7 +35,7 @@ public:
 
     void manualSerialAlarmState();
 
-
+    void tick();
 };
 
 #endif
