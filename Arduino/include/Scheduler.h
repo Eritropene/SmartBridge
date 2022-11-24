@@ -3,7 +3,7 @@
 
 #include "Task.h"
 
-/*Scheduler dei task, eseguito nel super loop*/
+/*Task Scheduler, runs in the main loop*/
 class Scheduler {
 
     Task** tasks;

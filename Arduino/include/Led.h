@@ -5,8 +5,8 @@
 class Led {
     
     int pin;
-    long blinkPeriod = 1000;
-    long t = 0;
+    unsigned long blinkPeriod = 1000;
+    unsigned long t = 0;
     bool isOn;
 
 public:

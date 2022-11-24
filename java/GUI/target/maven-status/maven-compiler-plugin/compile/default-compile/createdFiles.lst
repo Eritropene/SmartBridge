@@ -1,7 +1,0 @@
-smartbridge\model\SerialCommunicator.class
-smartbridge\GUI\Launcher.class
-smartbridge\GUI\MainController.class
-smartbridge\model\SerialCommChannel.class
-smartbridge\model\CommChannel.class
-smartbridge\model\Communicator.class
-smartbridge\GUI\App.class
