@@ -12,6 +12,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.ImageView;
 
 public class MainController implements Initializable{
 	
@@ -43,14 +44,18 @@ public class MainController implements Initializable{
 	private NumberAxis xAxis;
 	@FXML
 	private NumberAxis yAxis;
+	@FXML
+	private ImageView lightImage;
+	@FXML
+	private ImageView pirImage;
 	
 	private AreaChart.Series<Double, Double> series = new AreaChart.Series<>();
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		initChart();
-		ledLabel.setText("LED: off");
-		lsLabel.setText("LS: 98239");
+		lightImage.setVisible(false);
+		pirImage.setVisible(false);
 	}
 	
 	@FXML
@@ -89,6 +94,12 @@ public class MainController implements Initializable{
 	}
 	public void setMotorLabelText(String txt) {
 		Platform.runLater(() -> motorLabel.setText(txt));
+	}
+	public void setLightImgVisible(boolean value) {
+		Platform.runLater(() -> lightImage.setVisible(value));
+	}
+	public void setPirImgVisible(boolean value) {
+		Platform.runLater(() -> pirImage.setVisible(value));
 	}
 	
 	private void initChart() {

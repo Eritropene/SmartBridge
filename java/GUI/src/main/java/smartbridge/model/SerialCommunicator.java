@@ -40,6 +40,7 @@ public class SerialCommunicator implements Communicator {
 		/* DECODE THE MSG */
 		switch (t[0]) {
 		case "LIGHT":
+			controller.setLightImgVisible(t[1].equals("ON"));
 			controller.setLedLabelText("LIGHT: "+t[1]);
 			break;
 		case "LIGHTSENSEOR":
@@ -49,6 +50,7 @@ public class SerialCommunicator implements Communicator {
 			controller.setTHLabelText("THRESHOLD: "+t[1]);
 			break;
 		case "PIR":
+			controller.setLightImgVisible(t[1].equals("detected"));
 			controller.setPirLabelText("PIR: "+t[1]);
 			break;
 		case "STATE":
