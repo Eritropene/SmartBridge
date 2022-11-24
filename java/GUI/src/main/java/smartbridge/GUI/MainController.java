@@ -4,19 +4,18 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 
 public class MainController implements Initializable{
-
-	private static final int MAX_CHART_POINTS = 10;
+	
+	private static final int MAX_LENGHT_OF_CHART = 50;
 	
 	@FXML
 	private Label ledLabel;
@@ -39,19 +38,17 @@ public class MainController implements Initializable{
 	@FXML
 	private Slider slider;
 	@FXML
-	private AreaChart<Number, Number> chart;
+	private AreaChart<Double, Double> chart;
 	@FXML
 	private NumberAxis xAxis;
 	@FXML
 	private NumberAxis yAxis;
 	
-	private AreaChart.Series<Number, Number> series = new AreaChart.Series<>();
+	private AreaChart.Series<Double, Double> series = new AreaChart.Series<>();
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		initChart();
-		addPointToChart(0,0);
-		addPointToChart(1,1);
 		ledLabel.setText("LED: off");
 		lsLabel.setText("LS: 98239");
 	}
@@ -67,45 +64,61 @@ public class MainController implements Initializable{
     }
 	
 	public void setLedLabelText(String txt) {
-		ledLabel.setText(txt);
+		Platform.runLater(() -> ledLabel.setText(txt));
 	}
 	public void setLightSensorLabelText(String txt) {
-		lsLabel.setText(txt);
+		Platform.runLater(() -> lsLabel.setText(txt));
 	}
 	public void setTHLabelText(String txt) {
-		thLabel.setText(txt);
+		Platform.runLater(() -> thLabel.setText(txt));
 	}
 	public void setPirLabelText(String txt) {
-		pirLabel.setText(txt);
+		Platform.runLater(() -> pirLabel.setText(txt));
 	}
 	public void setStateLabelText(String txt) {
-		stateLabel.setText(txt);
+		Platform.runLater(() -> stateLabel.setText(txt));
 	}
 	public void setWaterLevelLabelText(String txt) {
-		wlLabel.setText(txt);
+		Platform.runLater(() -> wlLabel.setText(txt));
 	}
 	public void setWL1LabelText(String txt) {
-		wl1Label.setText(txt);
+		Platform.runLater(() -> wl1Label.setText(txt));
 	}
 	public void setWL2LabelText(String txt) {
-		wl2Label.setText(txt);
+		Platform.runLater(() -> wl2Label.setText(txt));
 	}
 	public void setMotorLabelText(String txt) {
-		motorLabel.setText(txt);
+		Platform.runLater(() -> motorLabel.setText(txt));
 	}
 	
 	private void initChart() {
         yAxis.setAutoRanging(false); //prevent automatic resizing for simplicity
-
+        
+        xAxis.setTickLabelsVisible(false);
         xAxis.setLowerBound(0);
+        xAxis.setUpperBound(MAX_LENGHT_OF_CHART - 1);
         
         yAxis.setUpperBound(10);
         yAxis.setLowerBound(0);
         yAxis.setTickUnit(0.5);
         chart.getData().add(series);
+        chart.setCreateSymbols(false);
+        chart.setAnimated(false);
+        
+        for (int i = 0; i < MAX_LENGHT_OF_CHART; i++) {
+        	series.getData().add(new Data<Double, Double>((double)i,0.0));
+        }
 	}
 	
-	public void addPointToChart(Number value, Number seconds) {
-		series.getData().add(new Data<Number, Number>(seconds, value));
+	public void addPointToChart(Double value) {
+		Platform.runLater(() -> {
+			var d = series.getData().get(0);
+			for (int i = 1; i < MAX_LENGHT_OF_CHART; i++) {
+				var e = series.getData().get(i);
+				d.setYValue(e.getYValue());
+				d = e;
+			}
+			d.setYValue(value);
+		});
 	}
 }

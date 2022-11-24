@@ -28,7 +28,7 @@ public class App extends Application {
         	Communicator comm = new SerialCommunicator(Launcher.PORT, controller);
 			comm.listen();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Error: PORT not found or busy");
 			terminate(-1);
 		}
         
