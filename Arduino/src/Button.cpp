@@ -7,11 +7,20 @@ Button::Button(int pin) {
     pressed = false;
 }
 
+bool Button::buttonDown() {
+    if (isPressed() && press) {
+        press = false;
+        return true;
+    }
+    return false;
+}
+
 bool Button::isPressed() {
     if (millis() > t + sensibility) {
         t = millis();
         pressed = (bool)digitalRead(pin);
     }
+    if (!pressed) press = true;
     return pressed;
 }
 

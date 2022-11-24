@@ -12,16 +12,17 @@ Sonar::Sonar(int trig, int echo, float newVs) {
     vs = newVs;
 }
 
+/* Returns the distance in meters*/
 float Sonar::getDistance()
 {
-    /* invio impulso */
+    /* Send pulse */
     digitalWrite(trigPin,LOW);
     delayMicroseconds(3);
     digitalWrite(trigPin,HIGH);
     delayMicroseconds(5);
     digitalWrite(trigPin,LOW);
     
-    /* ricevi l’eco */
+    /* Get echo */
     float tUS = pulseIn(echoPin, HIGH);
     float t = tUS / 1000.0 / 1000.0 / 2;
     float d = t*vs;

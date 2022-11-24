@@ -13,7 +13,7 @@ void LedControlTask::tick() {
 
     // Send Light Sensor data to serial every 1 second
     if (millis() > lightLevelSerialPrintTimer) {
-        String msg = "LIGHTLEVEL: ";
+        String msg = "LIGHTLEVEL:";
         msg += lightSensor->getValue();
         MsgService.sendMsg(msg);
         lightLevelSerialPrintTimer = millis() + 1000;
@@ -48,7 +48,7 @@ void LedControlTask::tick() {
 void LedControlTask::LedOnState() {
     led->turnOn();
     state = LED_ON;
-    MsgService.sendMsg("LIGHT: ON");
+    MsgService.sendMsg("LIGHT:ON");
 }
 
 /*Passa allo stato di attesa prima di spegnere il LED*/
@@ -61,5 +61,5 @@ void LedControlTask::LedShutdownState() {
 void LedControlTask::LedOffState() {
     led->turnOff();
     state = LED_OFF;
-    MsgService.sendMsg("LIGHT: OFF");
+    MsgService.sendMsg("LIGHT:OFF");
 }

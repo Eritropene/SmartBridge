@@ -6,6 +6,7 @@ class Button {
 
     int pin;
     bool pressed;
+    bool press = true;
     unsigned long sensibility = 50;
     unsigned long t;
 
@@ -14,6 +15,8 @@ public:
     Button(int pin);
     /*Ritorna true se premuto, false altrimenti*/
     bool isPressed();
+
+    bool buttonDown();
     /*Setta la sensibilita' del debouncer. Default=50ms*/
     void setSensibility(long millis);
 };
