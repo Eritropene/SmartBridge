@@ -15,3 +15,7 @@ float LightSensor::getValue() {
 bool LightSensor::isAboveThreshold() {
     return getValue() > threshold;
 }
+
+float LightSensor::getThreshold() {
+    return threshold;
+}

@@ -1,21 +1,33 @@
 #include "LedControlTask.h"
 #include <Arduino.h>
 
-#define shutdownDelay 10000
+#define SHUTDOWN_DELAY 10000
 
 LedControlTask::LedControlTask (Led* displayLed, PirSensor* pirSensor, LightSensor* lSensor) {
     led = displayLed;
     pir = pirSensor;
     lightSensor = lSensor;
+
+    state = LED_OFF;
+
+    //messages
+    String msg = "THRESHOLD:";
+    msg += lightSensor->getThreshold();
+    MsgService.sendMsg(msg);
 }
 
 void LedControlTask::tick() {
 
-    // Send Light Sensor data to serial every 1 second
+    // Send Light Sensor and Pir data to serial every 1 second
     if (millis() > lightLevelSerialPrintTimer) {
         String msg = "LIGHTLEVEL:";
         msg += lightSensor->getValue();
         MsgService.sendMsg(msg);
+
+        msg = "PIR:";
+        msg += pir->getSignal() ? "detected" : "not detected";
+        MsgService.sendMsg(msg);
+
         lightLevelSerialPrintTimer = millis() + 1000;
     }
 
@@ -53,7 +65,7 @@ void LedControlTask::LedOnState() {
 
 /*Passa allo stato di attesa prima di spegnere il LED*/
 void LedControlTask::LedShutdownState() {
-    shutdownTimer = millis() + shutdownDelay;
+    shutdownTimer = millis() + SHUTDOWN_DELAY;
     state = LED_SHUTDOWN;
 }
 

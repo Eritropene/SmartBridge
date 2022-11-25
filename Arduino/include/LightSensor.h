@@ -14,6 +14,8 @@ class LightSensor {
     float getValue();
 
     bool isAboveThreshold();
+
+    float getThreshold();
 };
 
 #endif
