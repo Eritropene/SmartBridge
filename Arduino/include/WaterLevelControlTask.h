@@ -20,9 +20,10 @@ enum AlarmStateControl {AUTO, MANUAL_POT, MANUAL_SERIAL};
 class WaterLevelControlTask: public Task {
 private:
 
-    unsigned int measureTimeInterval = 1000;
-    unsigned long measureTimer;
-    float waterLevel;
+    unsigned int measureTimeInterval = MEASURE_DELAY_NORMAL;
+    unsigned long measureTimer = 0;
+    float waterLevel = 0;
+    int motorAngle = 0;
 
     WaterLevelControlState state;
     AlarmStateControl alarmStateControl;
@@ -36,6 +37,10 @@ private:
     LiquidCrystal_I2C* display;
 
     void measureWaterLevel();
+
+    void lcdPreAlarm();
+
+    void lcdAlarm();
 
 public:
     WaterLevelControlTask(Led* alarmLed, Led* greenLed, Button* button, Potentiometer* pot, Servo* servoMotor, Sonar* sonar, LiquidCrystal_I2C* display);
@@ -55,6 +60,8 @@ public:
     void tick();
 
     void alarmTick();
+
+    bool isInAlarmState();
 };
 
 #endif
