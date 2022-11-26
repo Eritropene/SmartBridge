@@ -86,8 +86,9 @@ public class SerialCommunicator implements Communicator {
 		case "MOTOR":
 			controller.setMotorLabelText("MOTOR: "+t[1]);
 			break;
-		case "BUTTON":
-			this.canActivateManual = !canActivateManual;
+			
+		case "AS":
+			this.canActivateManual = !t[1].equals("MPOT");
 			break;
 		}
 	}
@@ -100,7 +101,7 @@ public class SerialCommunicator implements Communicator {
 	
 	public void changeMotorValue(int val) {
 		if (alarmState) {
-			sendData("MOTOR:"+val);
+			sendData("M:"+val);
 		}
 	}
 	

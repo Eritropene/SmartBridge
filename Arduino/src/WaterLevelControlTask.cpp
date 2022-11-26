@@ -12,6 +12,12 @@ WaterLevelControlTask::WaterLevelControlTask(Led* alarmLed, Led* greenLed, Butto
 
     alarmLed->setBlinkPeriod(1000);
     display->init();
+
+    normalState();
+
+    //messages
+    MsgService.sendMsg("WL1:PRE_ALARM_THRESHOLD");
+    MsgService.sendMsg("WL2:ALARM_THRESHOLD");
 }
 
 void WaterLevelControlTask::tick() {
@@ -60,32 +66,50 @@ void WaterLevelControlTask::tick() {
 
 void WaterLevelControlTask::alarmTick() {
 
-    
-
     switch (alarmStateControl) {
     case AUTO:
-        if (button->buttonDown()) {
+        if (button->buttonDown()) { //button pressed -> Manual Potentiometer
             manualPotAlarmState();
-        } else if (MsgService.isMsgAvailable()) {
+        } else if (MsgService.isMsgAvailable()) { //msg -> Manual Serial
             Msg* msg = MsgService.receiveMsg();
             if (msg->getContent() == "MANUAL") {
                 manualSerialAlarmState();
             }
             delete msg;
-        } else {
-            servoMotor->write((180 - waterLevel * 360));
         }
+        //calculate angle
+        motorAngle = (int)(180 - (waterLevel/ALARM_THRESHOLD) * 180);
         break;
     
     case MANUAL_POT:
-        if (button->buttonDown()) {
-
+        if (button->buttonDown()) { //button -> Auto
+            autoAlarmState();
         }
+
+        //calculate angle
+        motorAngle = (int)(180 * pot->getValue());
         break;
 
     case MANUAL_SERIAL:
+        if (MsgService.isMsgAvailable()) { //msg -> Auto
+            Msg* msg = MsgService.receiveMsg();
+            if (msg->getContent() == "AUTO") {
+                autoAlarmState();
+            } else if (msg->getContent()[0] == 'M') { // ex. "M:96"
+                //calculate angle
+                motorAngle = msg->getContent().substring(2).toInt();
+            }
+            delete msg;
+        }
         break;
     }
+
+    //move motor by angle
+    servoMotor->write(motorAngle);
+    //send msg
+    String msg = "MOTOR:";
+    msg += motorAngle;
+    MsgService.sendMsg(msg);
 }
 
 bool WaterLevelControlTask::isInAlarmState() {
@@ -101,17 +125,18 @@ void WaterLevelControlTask::measureWaterLevel() {
 
 void WaterLevelControlTask::alarmState() {
     state = ALARM;
-    alarmStateControl = AUTO;
+    autoAlarmState();
     measureTimeInterval = MEASURE_DELAY_ALARM;
     MsgService.sendMsg("STATE:ALARM");
 
     display->backlight();
     alarmLed->turnOn();
+    greenLed->turnOff();
 }
 
 void WaterLevelControlTask::preAlarmState() {
     state = PRE_ALARM;
-    measureTimeInterval = MEASURE_DELAY_ALARM;
+    measureTimeInterval = MEASURE_DELAY_PREALARM;
     MsgService.sendMsg("STATE:PREALARM");
 
     display->backlight();
@@ -122,11 +147,28 @@ void WaterLevelControlTask::preAlarmState() {
 void WaterLevelControlTask::normalState() {
     state = NORMAL;
     measureTimeInterval = MEASURE_DELAY_NORMAL;
+    MsgService.sendMsg("STATE:NORMAL");
+
 
     display->noBacklight();
     greenLed->turnOn();
     alarmLed->turnOff();
 
+}
+
+void WaterLevelControlTask::autoAlarmState() {
+    alarmStateControl = AUTO;
+    MsgService.sendMsg("AS:AUTO");
+}
+
+void WaterLevelControlTask::manualPotAlarmState() {
+    alarmStateControl = MANUAL_POT;
+    MsgService.sendMsg("AS:MPOT");
+}
+
+void WaterLevelControlTask::manualSerialAlarmState() {
+    alarmStateControl = MANUAL_SERIAL;
+    MsgService.sendMsg("AS:MSER");
 }
 
 void WaterLevelControlTask::lcdPreAlarm() {
