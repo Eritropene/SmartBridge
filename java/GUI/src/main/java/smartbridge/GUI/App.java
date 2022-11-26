@@ -18,15 +18,17 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-    	
-    	MainController controller = new MainController();
-    	
-        scene = new Scene(loadFXML("main", controller), 900, 550);
-        scene.getStylesheets().add(ClassLoader.getSystemResource("smartbridge/css/stylesheet.css").toExternalForm());
-        
         try {
-        	Communicator comm = new SerialCommunicator(Launcher.PORT, controller);
+        	var comm = new SerialCommunicator(Launcher.PORT);
+        	
+        	MainController controller = new MainController(comm);
+        	comm.init(controller);
+        	
+            scene = new Scene(loadFXML("main", controller), 900, 550);
+            scene.getStylesheets().add(ClassLoader.getSystemResource("smartbridge/css/stylesheet.css").toExternalForm());
+        	
 			comm.listen();
+			
 		} catch (Exception e) {
 			System.out.println("Error: PORT not found or busy");
 			terminate(-1);

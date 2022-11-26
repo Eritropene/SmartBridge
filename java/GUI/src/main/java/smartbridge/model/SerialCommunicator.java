@@ -11,10 +11,15 @@ public class SerialCommunicator implements Communicator {
 	private MainController controller;
 	
 	private double wl = 0.0;
+	private boolean alarmState = false;
+	private boolean canActivateManual = true;
 	private Timer chartDataSender = new Timer(50, () -> controller.addPointToChart(wl));
 	
-	public SerialCommunicator(String port, MainController controller) throws Exception{
-		this.channel = new TestCommChannel(port, RATE);
+	public SerialCommunicator(String port) throws Exception{
+		this.channel = new Test2CommChannel(port, RATE);
+	}
+	
+	public void init(MainController controller) {
 		this.controller = controller;
 	}
 	
@@ -27,6 +32,11 @@ public class SerialCommunicator implements Communicator {
 					while (channel.isMsgAvailable()) {
 						decode(channel.receiveMsg());
 					}
+					
+					if (alarmState) {
+						
+					}
+					
 					//wait a bit
 					Thread.sleep(10);
 				} catch (Exception e) {}				
@@ -34,6 +44,7 @@ public class SerialCommunicator implements Communicator {
 		}).start();
 		chartDataSender.start();
 	}
+	
 	private void decode(String msg) {
 		var t = msg.split(":");
 		
@@ -55,6 +66,12 @@ public class SerialCommunicator implements Communicator {
 			break;
 		case "STATE":
 			controller.setStateLabelText("STATE: "+t[1]);
+			this.alarmState = t[1].equals("ALARM");
+			if (alarmState) {
+				this.controller.enableAutoMotorPane();
+			} else {
+				this.controller.disableMotorPane();
+			}
 			break;
 		case "WATERLEVEL":
 			wl = MAX_WATER_LEVEL - Double.parseDouble(t[1]);
@@ -69,13 +86,34 @@ public class SerialCommunicator implements Communicator {
 		case "MOTOR":
 			controller.setMotorLabelText("MOTOR: "+t[1]);
 			break;
+		case "BUTTON":
+			this.canActivateManual = !canActivateManual;
+			break;
 		}
 	}
 
 	@Override
 	public void sendData(String data) {
-		// TODO Auto-generated method stub
-
+		this.channel.sendMsg(data);
+		System.out.println(data);
+	}
+	
+	public void changeMotorValue(int val) {
+		if (alarmState) {
+			sendData("MOTOR:"+val);
+		}
+	}
+	
+	public void setToManual() {
+		if (this.canActivateManual) {
+			this.channel.sendMsg("MANUAL");
+			this.controller.enableManualMotorPane();
+		}
+	}
+	
+	public void setToAuto() {
+		this.channel.sendMsg("AUTO");
+		this.controller.enableAutoMotorPane();
 	}
 	
 	private class Timer extends Thread {

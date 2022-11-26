@@ -10,14 +10,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Data;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import smartbridge.model.Communicator;
+import smartbridge.model.SerialCommunicator;
 
 public class MainController implements Initializable{
 	
 	private static final int MAX_LENGHT_OF_CHART = 50;
 	
+	private SerialCommunicator comm;
 	@FXML
 	private Label ledLabel;
 	@FXML
@@ -39,6 +44,12 @@ public class MainController implements Initializable{
 	@FXML
 	private Slider slider;
 	@FXML
+	private AnchorPane motorPane;
+	@FXML
+	private Button manualButton;
+	@FXML
+	private Button autoButton;
+	@FXML
 	private AreaChart<Double, Double> chart;
 	@FXML
 	private NumberAxis xAxis;
@@ -51,21 +62,32 @@ public class MainController implements Initializable{
 	
 	private AreaChart.Series<Double, Double> series = new AreaChart.Series<>();
 	
+	public MainController(SerialCommunicator comm) {
+		this.comm = comm;
+	}
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		initChart();
+		
 		lightImage.setVisible(false);
 		pirImage.setVisible(false);
+		
+		disableMotorPane();
+		
+		slider.valueProperty().addListener((a0, a1, a2) -> {
+			comm.changeMotorValue((int)slider.getValue());
+		});
 	}
 	
 	@FXML
     private void setMotorToManual() throws IOException {
-        // roba
+		comm.setToManual();
     }
 	
 	@FXML
     private void setMotorToAuto() throws IOException {
-        // roba
+		comm.setToAuto();
     }
 	
 	public void setLedLabelText(String txt) {
@@ -131,5 +153,22 @@ public class MainController implements Initializable{
 			}
 			d.setYValue(value);
 		});
+	}
+	
+	public void disableMotorPane() {
+		this.slider.setDisable(true);
+		this.autoButton.setDisable(true);
+		this.manualButton.setDisable(true);
+	}
+	
+	public void enableAutoMotorPane() {
+		this.slider.setDisable(true);
+		this.autoButton.setDisable(true);
+		this.manualButton.setDisable(false);
+	}
+	public void enableManualMotorPane() {
+		this.slider.setDisable(false);
+		this.autoButton.setDisable(false);
+		this.manualButton.setDisable(true);
 	}
 }
