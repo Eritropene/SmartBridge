@@ -3,10 +3,11 @@
 
 #define SHUTDOWN_DELAY 10000
 
-LedControlTask::LedControlTask (Led* displayLed, PirSensor* pirSensor, LightSensor* lSensor) {
+LedControlTask::LedControlTask (Led* displayLed, PirSensor* pirSensor, LightSensor* lSensor, WaterLevelControlTask* waterlevelTask) {
     led = displayLed;
     pir = pirSensor;
     lightSensor = lSensor;
+    wlTask = waterlevelTask;
 
     state = LED_OFF;
 
@@ -54,6 +55,15 @@ void LedControlTask::tick() {
             LedOnState();
         }
         break;
+    case LED_DISABLED:
+        if (!wlTask->isInAlarmState()) {
+            LedOffState();
+        }
+        break;
+    }
+
+    if (wlTask->isInAlarmState()) {
+        LedDisabledState();
     }
 }
 
@@ -73,5 +83,12 @@ void LedControlTask::LedShutdownState() {
 void LedControlTask::LedOffState() {
     led->turnOff();
     state = LED_OFF;
+    MsgService.sendMsg("LIGHT:OFF");
+}
+
+/*Passa allo stato di LED disabilitato*/
+void LedControlTask::LedDisabledState() {
+    led->turnOff();
+    state = LED_DISABLED;
     MsgService.sendMsg("LIGHT:OFF");
 }
