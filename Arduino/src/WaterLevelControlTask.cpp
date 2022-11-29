@@ -31,8 +31,15 @@ void WaterLevelControlTask::tick() {
         if (state == PRE_ALARM) {
             lcdPreAlarm();
         } else if (isInAlarmState()) {
+
+        //send msg
+        String msg = "MOTOR:";
+        msg += motorAngle;
+        MsgService.sendMsg(msg);
             lcdAlarm();
         }
+
+        
     }
 
     switch (state)
@@ -107,10 +114,6 @@ void WaterLevelControlTask::alarmTick() {
 
     //move motor by angle
     servoMotor->write(motorAngle);
-    //send msg
-    String msg = "MOTOR:";
-    msg += motorAngle;
-    MsgService.sendMsg(msg);
 }
 
 bool WaterLevelControlTask::isInAlarmState() {

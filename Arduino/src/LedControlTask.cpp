@@ -62,7 +62,7 @@ void LedControlTask::tick() {
         break;
     }
 
-    if (wlTask->isInAlarmState()) {
+    if (wlTask->isInAlarmState() && !(state == LED_DISABLED)) {
         LedDisabledState();
     }
 }

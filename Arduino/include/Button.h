@@ -8,7 +8,7 @@ class Button {
     bool pressed;
     bool press = true;
     unsigned long sensibility = 50;
-    unsigned long t;
+    unsigned long t = 0;
 
 public:
     /*Crea un pulsante sul pin @pin*/
