@@ -2,11 +2,15 @@
 #include <Arduino.h>
 
 Sonar::Sonar(int trig, int echo) {
+    pinMode(trig, OUTPUT);
+    pinMode(echo, OUTPUT);
     trigPin = trig;
     echoPin = echo;
 }
 
 Sonar::Sonar(int trig, int echo, float newVs) {
+    pinMode(trig, OUTPUT);
+    pinMode(echo, OUTPUT);
     trigPin = trig;
     echoPin = echo;
     vs = newVs;
