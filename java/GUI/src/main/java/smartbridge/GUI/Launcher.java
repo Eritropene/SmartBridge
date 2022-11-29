@@ -13,14 +13,18 @@ public class Launcher {
 		
 		Scanner in = new Scanner(System.in);
 		
-		System.out.println("Select the Serial Port:");
-		System.out.print("  -  ");
-		for (var port : SerialPortList.getPortNames()) {
-			System.out.print(port + "  -  ");
+		if (SerialPortList.getPortNames().length == 1) {
+			PORT = SerialPortList.getPortNames()[0];
+		} else {
+			System.out.println("Select the Serial Port:");
+			System.out.print("  -  ");
+			for (var port : SerialPortList.getPortNames()) {
+				System.out.print(port + "  -  ");
+			}
+			System.out.println();
+			
+			PORT = in.nextLine();
 		}
-		System.out.println();
-		
-		PORT = in.nextLine();
 
 		//PORT = args[0];
 		//PORT = "COM1";

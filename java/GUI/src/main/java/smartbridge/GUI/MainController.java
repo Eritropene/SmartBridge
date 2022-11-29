@@ -72,6 +72,8 @@ public class MainController implements Initializable{
 		lightImage.setVisible(false);
 		pirImage.setVisible(false);
 		
+		ledLabel.setText("LIGHT: OFF");
+		
 		disableMotorPane();
 		
 		slider.valueProperty().addListener((a0, a1, a2) -> {
@@ -130,7 +132,7 @@ public class MainController implements Initializable{
         xAxis.setLowerBound(0);
         xAxis.setUpperBound(MAX_LENGHT_OF_CHART - 1);
         
-        yAxis.setUpperBound(10);
+        yAxis.setUpperBound(SerialCommunicator.MAX_WATER_LEVEL);
         yAxis.setLowerBound(0);
         yAxis.setTickUnit(0.5);
         chart.getData().add(series);

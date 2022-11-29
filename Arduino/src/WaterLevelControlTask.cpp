@@ -16,8 +16,12 @@ WaterLevelControlTask::WaterLevelControlTask(Led* alarmLed, Led* greenLed, Butto
     normalState();
 
     //messages
-    MsgService.sendMsg("WL1:PRE_ALARM_THRESHOLD");
-    MsgService.sendMsg("WL2:ALARM_THRESHOLD");
+    String msg = "WL1:";
+    msg += PRE_ALARM_THRESHOLD;
+    MsgService.sendMsg(msg);
+    msg = "WL2:";
+    msg += ALARM_THRESHOLD;
+    MsgService.sendMsg(msg);
     // I don't know what this does but if I remove this the code breaks
     button->buttonDown();
 }
@@ -34,13 +38,14 @@ void WaterLevelControlTask::tick() {
             lcdPreAlarm();
         } else if (isInAlarmState()) {
 
-        //send msg
-        String msg = "MOTOR:";
-        msg += motorAngle;
-        MsgService.sendMsg(msg);
+            //send msg
+            String msg = "MOTOR:";
+            msg += motorAngle;
+            MsgService.sendMsg(msg);
             lcdAlarm();
+            
         }
-
+        
         
     }
 

@@ -5,7 +5,7 @@ import smartbridge.GUI.MainController;
 public class SerialCommunicator implements Communicator {
 
 	private static final int RATE = 9600;
-	private static final double MAX_WATER_LEVEL = 10;
+	public static final double MAX_WATER_LEVEL = 2;
 	
 	private CommChannel channel;
 	private MainController controller;
@@ -13,10 +13,13 @@ public class SerialCommunicator implements Communicator {
 	private double wl = 0.0;
 	private boolean alarmState = false;
 	private boolean canActivateManual = true;
+	private boolean canSendData = true;
 	private Timer chartDataSender = new Timer(100, () -> controller.addPointToChart(wl));
+	private Timer motorDataSender = new Timer(150, () -> canSendData = true);
+
 	
 	public SerialCommunicator(String port) throws Exception{
-		this.channel = new TestCommChannel(port, RATE);
+		this.channel = new SerialCommChannel(port, RATE);
 	}
 	
 	public void init(MainController controller) {
@@ -43,6 +46,7 @@ public class SerialCommunicator implements Communicator {
 			}
 		}).start();
 		chartDataSender.start();
+		motorDataSender.start();
 	}
 	
 	private void decode(String msg) {
@@ -54,14 +58,14 @@ public class SerialCommunicator implements Communicator {
 			controller.setLightImgVisible(t[1].equals("ON"));
 			controller.setLedLabelText("LIGHT: "+t[1]);
 			break;
-		case "LIGHTSENSEOR":
-			controller.setLightSensorLabelText("LIGHT SENSOR: "+t[1]);
+		case "LIGHTLEVEL":
+			controller.setLightSensorLabelText("L LEVEL: "+t[1]);
 			break;
 		case "THRESHOLD":
-			controller.setTHLabelText("THRESHOLD: "+t[1]);
+			controller.setTHLabelText("TH: "+t[1]);
 			break;
 		case "PIR":
-			controller.setLightImgVisible(t[1].equals("detected"));
+			controller.setPirImgVisible(t[1].equals("detected"));
 			controller.setPirLabelText("PIR: "+t[1]);
 			break;
 		case "STATE":
@@ -96,12 +100,13 @@ public class SerialCommunicator implements Communicator {
 	@Override
 	public void sendData(String data) {
 		this.channel.sendMsg(data);
-		System.out.println(data);
+		//System.out.println(data);
 	}
 	
 	public void changeMotorValue(int val) {
-		if (alarmState) {
+		if (alarmState && canSendData) {
 			sendData("M:"+val);
+			canSendData = false;
 		}
 	}
 	

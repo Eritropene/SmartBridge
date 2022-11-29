@@ -31,15 +31,15 @@
             <version>${javafx.version}</version>
         </dependency>
 		<!-- Comment for cross-platform fat jar-->
-
+<!-- 
 		<dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
             <version>${javafx.version}</version>
         </dependency>
-
+-->
 	    <!-- Uncomment for cross-platform fat jar-->
-<!--
+<!---->
 		<dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
@@ -77,7 +77,7 @@
 	        <version>${javafx.version}</version>
 	        <classifier>mac</classifier>
 	    </dependency>
--->
+<!--  -->
     </dependencies>
     <build>
         <plugins>

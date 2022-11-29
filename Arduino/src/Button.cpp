@@ -3,7 +3,7 @@
 
 Button::Button(int pin) {
     this->pin = pin;
-    pinMode(pin, INPUT);
+    pinMode(pin, INPUT_PULLUP);
     pressed = false;
 }
 
@@ -18,7 +18,7 @@ bool Button::buttonDown() {
 bool Button::isPressed() {
     if (millis() >= t + sensibility) {
         t = millis();
-        pressed = (bool)digitalRead(pin);
+        pressed = !(bool)digitalRead(pin);
     }
     if (!pressed) press = true;
     return pressed;
