@@ -3,14 +3,14 @@
 
 Sonar::Sonar(int trig, int echo) {
     pinMode(trig, OUTPUT);
-    pinMode(echo, OUTPUT);
+    pinMode(echo, INPUT);
     trigPin = trig;
     echoPin = echo;
 }
 
 Sonar::Sonar(int trig, int echo, float newVs) {
     pinMode(trig, OUTPUT);
-    pinMode(echo, OUTPUT);
+    pinMode(echo, INPUT);
     trigPin = trig;
     echoPin = echo;
     vs = newVs;

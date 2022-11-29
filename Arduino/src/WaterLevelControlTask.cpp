@@ -3,7 +3,7 @@
 
 WaterLevelControlTask::WaterLevelControlTask(Led* alarmLed, Led* greenLed, Button* button, Potentiometer* pot, Servo* servoMotor, Sonar* sonar, LiquidCrystal_I2C* display) {
     this->alarmLed = alarmLed;
-    this->greenLed = alarmLed;
+    this->greenLed = greenLed;
     this->button = button;
     this->pot = pot;
     this->servoMotor = servoMotor;
