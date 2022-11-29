@@ -53,12 +53,12 @@ void WaterLevelControlTask::tick() {
         break;
     
     case PRE_ALARM:
+        alarmLed->blink();
         if (waterLevel < ALARM_THRESHOLD) {
             alarmState();
         } else if (waterLevel > PRE_ALARM_THRESHOLD) {
             normalState();
         }
-        alarmLed->blink();
         break;
 
     case ALARM:
@@ -186,7 +186,7 @@ void WaterLevelControlTask::lcdPreAlarm() {
 
 void WaterLevelControlTask::lcdAlarm() {
     display->setCursor(0, 0);
-    display->print("ALARM  angle=");
+    display->print("ALARM  angle=   ");
     display->setCursor(13, 0);
     display->print(motorAngle);
     display->setCursor(0, 1);
