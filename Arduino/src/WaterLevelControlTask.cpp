@@ -18,6 +18,8 @@ WaterLevelControlTask::WaterLevelControlTask(Led* alarmLed, Led* greenLed, Butto
     //messages
     MsgService.sendMsg("WL1:PRE_ALARM_THRESHOLD");
     MsgService.sendMsg("WL2:ALARM_THRESHOLD");
+    // I don't know what this does but if I remove this the code breaks
+    button->buttonDown();
 }
 
 void WaterLevelControlTask::tick() {
