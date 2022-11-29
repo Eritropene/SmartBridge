@@ -16,7 +16,7 @@ bool Button::buttonDown() {
 }
 
 bool Button::isPressed() {
-    if (millis() > t + sensibility) {
+    if (millis() >= t + sensibility) {
         t = millis();
         pressed = (bool)digitalRead(pin);
     }

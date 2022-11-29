@@ -6,7 +6,7 @@ class Button {
 
     int pin;
     bool pressed;
-    bool press = true;
+    bool press = false;
     unsigned long sensibility = 50;
     unsigned long t = 0;
 

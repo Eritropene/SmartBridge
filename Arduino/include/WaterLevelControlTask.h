@@ -26,8 +26,8 @@ private:
     float waterLevel = 0;
     int motorAngle = 0;
 
-    WaterLevelControlState state;
-    AlarmStateControl alarmStateControl;
+    WaterLevelControlState state = NORMAL;
+    AlarmStateControl alarmStateControl = AUTO;
 
     Led* alarmLed;
     Led* greenLed;
