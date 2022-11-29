@@ -19,7 +19,7 @@ public class TestCommChannel implements CommChannel {
 
 	@Override
 	public String receiveMsg() throws InterruptedException {
-		return "LIGHT:"+ (r.nextInt(11) > 4 ? "ON" : "OFF");
+		return "WATERLEVEL:"+ (r.nextDouble()%10);
 	}
 
 	@Override

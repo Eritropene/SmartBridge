@@ -13,10 +13,10 @@ public class SerialCommunicator implements Communicator {
 	private double wl = 0.0;
 	private boolean alarmState = false;
 	private boolean canActivateManual = true;
-	private Timer chartDataSender = new Timer(50, () -> controller.addPointToChart(wl));
+	private Timer chartDataSender = new Timer(100, () -> controller.addPointToChart(wl));
 	
 	public SerialCommunicator(String port) throws Exception{
-		this.channel = new Test2CommChannel(port, RATE);
+		this.channel = new TestCommChannel(port, RATE);
 	}
 	
 	public void init(MainController controller) {
